@@ -1,0 +1,153 @@
+<!-- <mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(media === 'xs' || media === 'sm') ? 'dialog' : 'navigation'"
+    mode="side" [opened]="true" (window:resize)="onResize($event)">
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list class="left_nav_list">
+        <a href="#" *ngIf="islogged"><mat-icon>search</mat-icon>Issue history</a> <br>
+        <a href="#" (click)="show=!show"><mat-icon>dashboard</mat-icon>Browse</a>
+        <div *ngIf="show"> 
+            Romance novel
+            Horror fiction
+            Science fiction
+            Fantasy
+            Non-fiction
+            Fiction
+            Historical fiction
+          </div>
+        <br>
+        <a href="#" *ngIf="islogged"><mat-icon>power_settings_new</mat-icon>Logout</a> <br>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+       *ngIf="(media === 'xs')"
+        <mat-icon *ngIf="!sideNav.opened" aria-label="Side nav toggle icon">menu</mat-icon>
+        <mat-icon *ngIf="sideNav.opened" aria-label="Side nav close icon">arrow_back_ios</mat-icon>
+      </button>
+      <button mat-button>
+        <div class="image-home"></div>
+      </button>
+      <span class="right-spacer"></span>
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Search" list="books">
+          <datalist id="books">
+            <option value="Book1"></option>
+          </datalist>
+        </mat-form-field>
+      </form>
+      <button mat-button>
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-stroked-button>
+        Logout
+      </button>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->
+<div class="example-container">
+  <mat-toolbar color="primary" class="example-toolbar dark-">
+    <button mat-icon-button (click)="snav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <button mat-button [routerLink]="['/browse']">
+      <div class="image-home"></div>
+    </button>
+    <h1 class="example-app-name" *ngIf="showTitle" fxShow="false" fxShow.gt-sm [routerLink]="['/browse']" style="cursor: pointer;font-size: 24px;">
+      Library Management System
+    </h1>
+    <span class="right-spacer"></span>
+    <!-- <button mat-stroked-button style="margin-right:15px;" (click)='themeService.changeTheme()'>Change Theme</button> -->
+    <form class="example-form" *ngIf="navigationService.showRegister">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Search book" list="books">
+        <!-- <datalist id="books">
+          <option value="Out of box"></option>
+        </datalist> -->
+      </mat-form-field>
+      <button mat-button>
+        <mat-icon>search</mat-icon>
+      </button>
+    </form>
+    <button mat-stroked-button *ngIf="authService.isAuthenticated" (click)="this.authService.logout()">
+      Logout
+    </button>
+    <a class="header_link" *ngIf="!authService.isAuthenticated&&navigationService.showLogin" [routerLink]="['/login']">
+      Login
+    </a>
+    <a class="header_link" *ngIf="!authService.isAuthenticated&&navigationService.showRegister" [routerLink]="['/login']">
+      Register
+    </a>
+    <mat-slide-toggle matTooltip="Change theme" (toggleChange)="change()" style="font-size: 0.7em;margin-left:15px;" [(ngModel)]='themeService.switch'></mat-slide-toggle>    
+  </mat-toolbar>
+  <mat-sidenav-container class="example-sidenav-container">
+    <mat-sidenav #snav mode="over" fixedTopGap="62" fixedInViewport="true" 
+    [attr.role]="(media === 'xs' || media === 'sm') ? 'dialog' : 'navigation'" 
+    [opened]="false" (window:resize)="onResize($event)">
+      <mat-nav-list class="left_nav_list">
+        <div class="content" *ngIf="authService.isAuthenticated" [routerLink]="['/issue_history']" style="cursor: pointer;">
+          <mat-icon>history</mat-icon>
+          <span class="text_content"> Checkout history </span>
+        </div>
+        <br *ngIf="authService.isAuthenticated">
+        <div class="content" *ngIf="authService.Admin" [routerLink]="['/register_book']">
+          <mat-icon>book</mat-icon>
+          <span class="text_content"> Regsiter book </span>
+        </div>
+        <br *ngIf="authService.Admin">
+        <div class="content" >
+          <mat-icon>dashboard</mat-icon>
+          <span class="text_content" style="cursor: pointer;" [routerLink]="['/browse']"> Browse </span>
+          <mat-icon *ngIf="!show" style="cursor: pointer;" (click)="show=!show" class="icon_content">keyboard_arrow_down
+          </mat-icon>
+          <mat-icon *ngIf="show" style="cursor: pointer;" (click)="show=!show" class="icon_content">keyboard_arrow_up
+          </mat-icon>
+        </div>
+        <div *ngIf="show" class="" style="cursor: pointer;">
+            <a class="content" [routerLink]="['/browse', 'art']">Art</a>
+            <br>
+            <a class="content" [routerLink]="['/browse', 'ent']">Entertainment</a>
+            <br>
+            <a class="content" [routerLink]="['/browse',   'fic']">Fiction</a>
+            <br>
+            <a class="content" [routerLink]="['/browse', 'hea']">Health</a>
+            <br>
+            <a class="content" [routerLink]="['/browse', 'his']">History</a>
+            <br>
+            <a class="content" [routerLink]="['/browse', 'mat']">Mathematics</a>
+            <br>
+            <a class="content" [routerLink]="['/browse', 'sci']">Science</a>
+            <br>
+            <a class="content" [routerLink]="['/browse', 'tec']">Technology</a>
+            <br>
+            <a class="content" [routerLink]="['/browse', 'mis']">Miscellaneous</a>
+            <br>
+        </div>
+        <br>
+        <div class="content" *ngIf="authService.isAuthenticated" [routerLink]="['/account_details']" style="cursor: pointer;">
+          <mat-icon>account_circle</mat-icon>
+          <span class="text_content"> Account details </span>
+        </div>
+        <br *ngIf="authService.isAuthenticated">
+        <div class="content" *ngIf="!authService.isAuthenticated" [routerLink]="['/login']" style="cursor: pointer;">
+          <mat-icon>account_box</mat-icon>
+          <span class="text_content">Login</span>
+        </div>
+        <br *ngIf="!authService.isAuthenticated">
+        <div class="content" *ngIf="!authService.isAuthenticated" [routerLink]="['/login']" style="cursor: pointer;">
+          <mat-icon>note_add</mat-icon>
+          <span class="text_content">Register</span>
+        </div>
+        <div class="content" *ngIf="authService.isAuthenticated" (click)="this.authService.logout()" style="cursor: pointer;">
+          <mat-icon>power_settings_new</mat-icon>
+          <span class="text_content">Logout</span>
+        </div>
+        <br>
+      </mat-nav-list>
+    </mat-sidenav>
+    <ng-content></ng-content>
+  </mat-sidenav-container>
+</div>

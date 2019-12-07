@@ -1,0 +1,69 @@
+<div class="paginator mat-drawer-container" style="position: fixed;z-index: 99;right:0;width: 100vw;">
+  <div style="height:30px;padding: 5px; text-align: center;">
+    <mat-form-field style="font-size: 20px; margin-top:-30px;">
+      <mat-select style="font-size: 15px;" placeholder="{{pagetitle}}">
+        <mat-option [routerLink]="['/browse', 'art']">
+          Art
+        </mat-option>
+        <mat-option [routerLink]="['/browse', 'ent']">
+          Entertainment
+        </mat-option>
+        <mat-option [routerLink]="['/browse', 'fic']">
+          Fiction
+        </mat-option>
+        <mat-option [routerLink]="['/browse', 'hea']">
+          Health
+        </mat-option>
+        <mat-option [routerLink]="['/browse', 'his']">
+          History
+        </mat-option>
+        <mat-option  [routerLink]="['/browse', 'mat']">
+          Mathematics
+        </mat-option>
+        <mat-option [routerLink]="['/browse', 'sci']">
+          Science
+        </mat-option>
+        <mat-option [routerLink]="['/browse', 'tec']">
+          Technology
+        </mat-option>
+        <mat-option [routerLink]="['/browse', 'mis']">
+          Miscellaneous
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- <span style="font-size: 25px;">{{pagetitle}}</span> -->
+  </div>
+  <mat-paginator style="border:none;  background: none;" [length]="5" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
+<mat-grid-list *ngIf="_bookService.books" cols="5" rowHeight="490px" style="margin-top:20px;">
+  <mat-grid-tile *ngFor='let book of _bookService.books' [colspan]="1" [rowspan]="1">
+    <mat-card class="example-card">
+      <div style="width: 100%; text-align: center;">
+        <div class="example-header-image"> </div>
+      </div>
+      <mat-card-content style="text-align: center;">
+        <mat-card-title>{{book.author}}</mat-card-title>
+        <mat-card-subtitle>{{book.title}}</mat-card-subtitle>
+        <mat-card-subtitle style="font-size:12px; color: grey; margin: 0px;"> Book Id: {{book.isbn}}</mat-card-subtitle>
+        <mat-card-subtitle style="font-size:12px; color: grey; margin: 0px;"> Location: {{book.location}}</mat-card-subtitle>
+      </mat-card-content>
+      <mat-card-actions>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+          <button mat-stroked-button (click)="openDialog(book.isbn)" *ngIf="!_authService.Admin">Checkout</button>
+          <button mat-stroked-button color="warn" *ngIf="_authService.Admin" (click)="openDialog1(book.isbn)">Delete</button>
+          <button mat-stroked-button (click)="openDialog2(book)" *ngIf="_authService.Admin">Update</button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<div style="position: fixed; top: 50vh; left: 38vw;" *ngIf="_bookService.books.length === 0">
+  <mat-card>
+    <mat-card-content>
+      There are no items to display. <br>
+      Please choose a different category for now.
+    </mat-card-content>
+  </mat-card>
+</div>
